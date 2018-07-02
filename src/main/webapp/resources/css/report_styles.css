@@ -1,0 +1,150 @@
+.info-grid {
+	background-color: #F0F0F0;
+	margin-left: 15%;
+	margin-right: 15%;
+}
+
+.info-wide-grid {
+	background-color: #F0F0F0;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+.table-header {
+	background-color: #D3D3D3;
+}
+
+.table-style {
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-top: 7px;
+}
+
+.label {
+	font-weight: bold;
+	padding: 4px;
+}
+
+.bold-text {
+	font-weight: bold;
+}
+
+.italic-text {
+	font-style: italic;
+	padding: 4px;
+}
+
+.left-aligned-text {
+	text-align: left;
+	padding: 4px;
+}
+
+.centered-text {
+	text-align: center;
+	padding: 4px;
+	text-align: center;
+}
+
+.bordered-table-small-text{
+	border: 1px solid black;
+	padding: 2px;
+	font-size: 8px;
+}
+
+.bordered-cell{
+	border: 1px solid black;
+	padding: 2px;
+}
+
+.small-text {
+	padding: 2px;
+	margin: 2px;
+	font-size: 8px;
+}
+
+.tesicnor-blue-small-text {
+	padding: 4px;
+	font-size: 10px;
+	background-color: #0375c9;
+	color: white;
+	border-color: #0375c9;
+}
+
+.tesicnor-orange-small-text {
+	padding: 4px;
+	font-size: 10px;
+	background-color: #ff7a00;
+	color: white;
+	border-color: #ff7a00;
+}
+
+.right-aligned-text {
+	text-align: right;
+	padding: 4px;
+}
+
+.left-aligned-bold-text {
+	font-weight: bold;
+	text-align: left;
+	padding: 4px;
+}
+
+.right-aligned-bold-text {
+	font-weight: bold;
+	text-align: right;
+	padding: 4px;
+}
+
+.h1 {
+	text-transform: uppercase;
+	padding: 8px;
+}
+
+.grouping-column {
+	text-transform: uppercase;
+	padding: 8px;
+	font-weight: bold;
+	background-color: #A8A8A8;
+}
+
+.redRow {
+	background-color: #D11919;
+}
+
+.greenRow {
+	background-color: #61C461;
+}
+
+.orangeRow {
+	background-color: #F7BE81;
+}
+
+.redText{
+	color: #D11919;
+}
+
+.greenText{
+	color: #61C461;
+}
+
+.orangeText{
+	color: #F7BE81;
+}
+
+.header-separator {
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+.paragraph {
+	margin-top: 7px;
+}
+
+.centered-paragraph {
+	text-align: center;
+	padding: 4pt;
+	text-align: center;
+	margin-top: 7pt;
+}

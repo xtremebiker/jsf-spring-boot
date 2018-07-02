@@ -1,0 +1,224 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+	xmlns:tc="http://xmlns.jcp.org/jsf/composite/tCheckComponents"
+	xmlns:o="http://omnifaces.org/ui">
+
+<composite:interface>
+	<composite:attribute name="selectorClass" required="true" />
+	<composite:attribute name="headOrganizations" required="true" />
+	<composite:attribute name="headWorkers" />
+	<composite:attribute name="selectedWorker" />
+	<composite:attribute name="headWarehouses" />
+	<composite:attribute name="revisions" />
+	<composite:attribute name="selectedWarehouse" />
+	<composite:attribute name="selectedOrganization" required="true" />
+	<composite:attribute name="value" required="true" />
+	<composite:attribute name="update" required="true" />
+	<composite:attribute name="action" required="true"
+		method-signature="void action()" />
+</composite:interface>
+
+<composite:implementation>
+	<div class="modal fade #{cc.attrs.selectorClass}" tabindex="-1"
+		role="dialog" aria-hidden="true" data-keyboard="false"
+		data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<h:panelGroup id="content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<i class="fa fa-times" />
+						</button>
+						<h4>
+							<h:outputText value="#{cc.attrs.value._Code}"
+								style="font-weight:bold;" />
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="row form-group">
+								<p:outputLabel for="org" value="#{msg.ORGANIZATION}"
+									class="col-sm-3 control-label text-right" />
+								<div class="col-sm-7">
+									<p:selectOneMenu id="org" required="true"
+										converter="omnifaces.SelectItemsConverter" filter="true"
+										filterMatchMode="custom" filterFunction="skipAccentsContains"
+										appendTo="@this" value="#{cc.attrs.selectedOrganization}"
+										style="width:100%;">
+										<f:selectItems value="#{cc.attrs.headOrganizations}"
+											var="organization" itemValue="#{organization._Id}"
+											itemLabel="#{organization._Name}" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+							<div class="row form-group">
+								<p:outputLabel for="name_field" value="#{msg.NAME}"
+									styleClass="col-md-3 control-label text-right" />
+								<div class="col-md-7">
+									<p:inputText id="name_field" required="true"
+										value="#{cc.attrs.value._Code}" />
+								</div>
+							</div>
+							<div class="row form-group">
+								<p:outputLabel for="date_field" value="#{msg.INIT_DATE}"
+									styleClass="col-md-3 control-label text-right" />
+								<div class="col-md-7">
+									<tc:calendar id="date_field"
+										value="#{cc.attrs.value._StartDate}" required="true" />
+								</div>
+							</div>
+							<div class="row form-group">
+								<p:outputLabel value="#{msg.START_TEMPERATURE}"
+									styleClass="col-md-3 control-label text-right" />
+								<div class="col-md-7">
+									<p:inputText value="#{cc.attrs.value._StartTemperature}" />
+								</div>
+							</div>
+							<div class="row form-group">
+								<p:outputLabel value="#{msg.END_TEMPERATURE}"
+									styleClass="col-md-3 control-label text-right" />
+								<div class="col-md-7">
+									<p:inputText value="#{cc.attrs.value._EndTemperature}" />
+								</div>
+							</div>
+							<div class="row form-group">
+								<p:outputLabel value="Humedad inicial"
+									styleClass="col-md-3 control-label text-right" />
+								<div class="col-md-7">
+									<p:inputText value="#{cc.attrs.value._StartHumidity}" />
+								</div>
+							</div>
+							<div class="row form-group">
+								<p:outputLabel value="Humedad final"
+									styleClass="col-md-3 control-label text-right" />
+								<div class="col-md-7">
+									<p:inputText value="#{cc.attrs.value._EndHumidity}" />
+								</div>
+							</div>
+							<div class="row form-group">
+								<p:outputLabel value="#{msg.PHYSICAL_LOCATION}"
+									styleClass="col-md-3 control-label text-right" />
+								<div class="col-md-7">
+									<p:inputTextarea value="#{cc.attrs.value._TaskLocation}"
+										style="width: 100%;" />
+								</div>
+							</div>
+							<div class="row form-group">
+								<p:outputLabel styleClass="col-md-3 text-right control-label"
+									value="Dirección cliente" />
+								<div class="col-md-7">
+									<p:inputTextarea value="#{bean._SelectedTask._AddressClient}"
+										style="width: 100%;" />
+								</div>
+							</div>
+							<div class="row form-group">
+								<p:outputLabel value="#{msg.WORKER_EMAIL_ADDRESS}"
+									styleClass="col-md-3 control-label text-right" />
+								<div class="col-md-7">
+									<p:inputText value="#{cc.attrs.value._WorkerEmail}" />
+								</div>
+							</div>
+							<div class="row form-group">
+								<p:outputLabel styleClass="col-md-3 text-right control-label"
+									value="Sistema de ensayo" />
+								<div class="col-md-7">
+									<p:inputText value="#{bean._SelectedTask._TestingSystem}" />
+								</div>
+							</div>
+							<ui:fragment rendered="#{cc.attrs.revisions}">
+								<div class="row form-group">
+									<p:outputLabel value="#{msg.WORKER}"
+										class="col-sm-3 control-label text-right" />
+									<div class="col-sm-7">
+										<p:selectOneMenu converter="omnifaces.SelectItemsConverter"
+											filter="true" filterMatchMode="custom"
+											filterFunction="skipAccentsContains" appendTo="@this"
+											value="#{cc.attrs.selectedWorker}" style="width:100%;">
+											<f:selectItem itemValue="#{null}" itemLabel="No asociado" />
+											<f:selectItems value="#{cc.attrs.headWorkers}" var="worker"
+												itemLabel="#{worker._Organization}, #{worker._FormattedName}"
+												itemValue="#{worker}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+								<div class="row form-group">
+									<p:outputLabel value="#{msg.WAREHOUSE}"
+										class="col-sm-3 control-label text-right" />
+									<div class="col-sm-7">
+										<p:selectOneMenu converter="omnifaces.SelectItemsConverter"
+											filter="true" filterMatchMode="custom"
+											filterFunction="skipAccentsContains" appendTo="@this"
+											value="#{cc.attrs.selectedWarehouse}" style="width:100%;">
+											<f:selectItem itemValue="#{null}" itemLabel="No asociado" />
+											<f:selectItems value="#{cc.attrs.headWarehouses}"
+												var="warehouse"
+												itemLabel="#{warehouse._Organization}, #{warehouse._Name}"
+												itemValue="#{warehouse}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</ui:fragment>
+							<hr />
+							<div class="row form-group">
+								<p:outputLabel styleClass="col-md-3 text-right control-label"
+									value="Configurar entidades acreditadoras" />
+								<div class="col-md-7">
+									<p:selectBooleanCheckbox value="#{bean._SetupAccreditation}">
+										<p:ajax update="accreditation_config" process="@this" />
+									</p:selectBooleanCheckbox>
+								</div>
+							</div>
+							<h:panelGroup layout="block" id="accreditation_config">
+								<h:panelGroup rendered="#{bean._SetupAccreditation}">
+									<div class="row form-group">
+										<p:outputLabel styleClass="col-md-3 text-right control-label"
+											value="Entidad" />
+										<div class="col-md-7">
+											<h:selectOneMenu disabled="true" style="width: 100%;">
+												<f:selectItem itemValue="ENAC" itemLabel="ENAC" />
+											</h:selectOneMenu>
+										</div>
+									</div>
+									<div class="row form-group">
+										<p:outputLabel styleClass="col-md-3 text-right control-label"
+											value="Periodicidad de revisiones" />
+										<tc:periodicityInput spinnerClass="col-md-2 col-xs-4"
+											selectClass="col-md-5 col-xs-8"
+											value="#{bean._AccreditationRevisionPeriodicity}" />
+									</div>
+									<div class="row form-group">
+										<p:outputLabel styleClass="col-md-3 text-right control-label"
+											value="Tipos de equipo" />
+										<div class="col-md-7 col-xs-12">
+											<p:pickList value="#{bean._EquipmentTypeSelection}"
+												var="equipmentType" itemLabel="#{equipmentType._Name}"
+												itemValue="#{equipmentType}" showSourceFilter="true"
+												showTargetFilter="true" filterMatchMode="custom"
+												filterFunction="skipAccentsContains">
+												<f:facet name="sourceCaption">Disponibles</f:facet>
+												<f:facet name="targetCaption">Asignados</f:facet>
+												<o:converter converterId="omnifaces.ListConverter"
+													list="#{bean._AllTypes}" />
+											</p:pickList>
+										</div>
+									</div>
+								</h:panelGroup>
+							</h:panelGroup>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<p:commandButton value="#{msg.SAVE}" action="#{cc.attrs.action}"
+							styleClass="btn btn-default" update="#{cc.attrs.update}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed) $('.#{cc.attrs.selectorClass}').modal('hide');" />
+					</div>
+				</h:panelGroup>
+			</div>
+		</div>
+	</div>
+</composite:implementation>
+</html>

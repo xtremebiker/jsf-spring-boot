@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:p="http://primefaces.org/ui">
+
+<composite:interface componentType="periodicityInput">
+	<composite:attribute name="value"
+		type="com.tesicnor.tcheck.exchange.model.PeriodicityExchange" />
+	<composite:attribute name="typeAutoValue" required="false"
+		default="YEAR" shortDescription="Auto-valor para tipo de periodicidad" />
+	<composite:attribute name="styleClass" />
+	<composite:attribute name="spinnerClass" />
+	<composite:attribute name="spinnerStyle" />
+	<composite:attribute name="selectClass" />
+	<composite:attribute name="noStyle" default="false" />
+</composite:interface>
+
+<composite:implementation>
+	<div>
+		<div
+			class="#{cc.attrs.noStyle ? '' : empty cc.attrs.spinnerClass ? 'col-xs-3' : cc.attrs.spinnerClass}"
+			style="">
+			<p:spinner binding="#{cc.periodicityValue}" min="0">
+				<p:ajax listener="#{cc.valueChanged}"
+					process="@this periodicity_type" update="periodicity_type" />
+			</p:spinner>
+		</div>
+		<div
+			class="#{cc.attrs.noStyle ? '' : empty cc.attrs.selectClass ? 'col-xs-4' : cc.attrs.selectClass}">
+			<h:selectOneMenu binding="#{cc.periodicityType}"
+				id="periodicity_type" styleClass="form-control">
+				<f:selectItem itemLabel="#{msg.PERIODICITY}"
+					noSelectionOption="true" />
+				<f:selectItem itemLabel="Día/s" itemValue="DAY" />
+				<f:selectItem itemLabel="Semana/s" itemValue="WEEK" />
+				<f:selectItem itemLabel="Mes/es" itemValue="MONTH" />
+				<f:selectItem itemLabel="Año/s" itemValue="YEAR" />
+			</h:selectOneMenu>
+		</div>
+	</div>
+</composite:implementation>
+</html>

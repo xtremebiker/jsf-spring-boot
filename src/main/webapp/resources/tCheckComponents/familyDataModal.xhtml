@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+<h:body>
+	<composite:interface>
+		<composite:attribute name="selectorClass" />
+		<composite:attribute name="head" />
+		<composite:attribute name="name" />
+		<composite:attribute name="text" />
+		<composite:attribute name="valueText" />
+		<composite:attribute name="bool" />
+		<composite:attribute name="valueBool" />
+		<composite:attribute name="date" />
+		<composite:attribute name="valueDate" />
+		<composite:attribute name="number" />
+		<composite:attribute name="valueNumber" />
+		<composite:attribute name="numberDouble" />
+		<composite:attribute name="valueNumberDouble" />
+	</composite:interface>
+	<composite:implementation>
+		<div class="modal fade #{cc.attrs.selectorClass}" tabindex="-1"
+			role="dialog" aria-labelledby="familyDataModal" aria-hidden="true"
+			data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<h:panelGroup id="content">
+						<div class="modal-header"
+							style="background-color: #DAE8EF; color: #003D50; border-bottom: 3px solid #C1D5DF">
+							<button type="button" class="close" data-dismiss="modal">
+								<i class="fa fa-times"></i>
+							</button>
+							<h4>
+								<h:outputText value="#{cc.attrs.head}" style="font-weight:bold;" />
+							</h4>
+						</div>
+						<div class="modal-body">
+							<div class="modal-body small-modal-body">
+								<div class="form-group form-group-sm" style="margin-bottom: 5%;">
+									<p:outputLabel value="#{msg.NAME}:" class="col-sm-1" />
+									<div class="col-sm-6">
+										<h:outputText style="width:100%;" value="#{cc.attrs.name}" />
+									</div>
+								</div>
+								<ui:fragment
+									rendered="#{cc.attrs.text == 0 and cc.attrs.bool == 0 and cc.attrs.date == 0 and cc.attrs.number == 0 and cc.attrs.numberDouble == 0}">
+									<h:outputText style="margin-left:2%"
+										value="#{msg.NOT_PROPERTIES_YET}" />
+								</ui:fragment>
+								<ui:fragment rendered="#{cc.attrs.text != 0}">
+									<p:dataTable var="text" value="#{cc.attrs.valueText}"
+										rowIndexVar="rowId"
+										tableStyleClass="table table-bordered table-striped table-hover table-condensed hide-column-names"
+										emptyMessage="#{msg.NO_RECORDS_FOUND}">
+										<f:facet name="header">
+										Propiedades de Texto
+									</f:facet>
+										<p:column styleClass="text-center">
+										Propiedad #{rowId+1}
+									</p:column>
+										<p:column styleClass="text-center">
+											<h:outputText value="#{cc.attrs.valueText[rowId]}" />
+										</p:column>
+									</p:dataTable>
+								</ui:fragment>
+
+								<ui:fragment rendered="#{cc.attrs.bool != 0}">
+									<p:dataTable var="bool" value="#{cc.attrs.valueBool}"
+										rowIndexVar="rowId"
+										tableStyleClass="table table-bordered table-striped table-hover table-condensed hide-column-names"
+										emptyMessage="#{msg.NO_RECORDS_FOUND}">
+										<f:facet name="header">
+										Propiedades de Booleano
+									</f:facet>
+										<p:column styleClass="text-center">
+										Propiedad #{rowId+1}
+									</p:column>
+										<p:column styleClass="text-center">
+											<h:outputText value="#{cc.attrs.valueBool[rowId]}" />
+										</p:column>
+									</p:dataTable>
+								</ui:fragment>
+
+								<ui:fragment rendered="#{cc.attrs.date != 0}">
+									<p:dataTable var="date" value="#{cc.attrs.valueDate}"
+										rowIndexVar="rowId"
+										tableStyleClass="table table-bordered table-striped table-hover table-condensed hide-column-names"
+										emptyMessage="#{msg.NO_RECORDS_FOUND}">
+										<f:facet name="header">
+										Propiedades de Fecha-Hora
+									</f:facet>
+										<p:column styleClass="text-center">
+										Propiedad #{rowId+1}
+									</p:column>
+										<p:column styleClass="text-center">
+											<h:outputText value="#{cc.attrs.valueDate[rowId]}" />
+										</p:column>
+									</p:dataTable>
+								</ui:fragment>
+
+								<ui:fragment rendered="#{cc.attrs.number != 0}">
+									<p:dataTable var="num" value="#{cc.attrs.valueNumber}"
+										rowIndexVar="rowId"
+										tableStyleClass="table table-bordered table-striped table-hover table-condensed hide-column-names"
+										emptyMessage="#{msg.NO_RECORDS_FOUND}">
+										<f:facet name="header">
+										Propiedades de Entero
+									</f:facet>
+										<p:column styleClass="text-center">
+										Propiedad #{rowId+1}
+									</p:column>
+										<p:column styleClass="text-center">
+											<h:outputText value="#{cc.attrs.valueNumber[rowId]}" />
+										</p:column>
+									</p:dataTable>
+								</ui:fragment>
+								<ui:fragment rendered="#{cc.attrs.numberDouble != 0}">
+									<p:dataTable var="num" value="#{cc.attrs.valueNumberDouble}"
+										rowIndexVar="rowId"
+										tableStyleClass="table table-bordered table-striped table-hover table-condensed hide-column-names"
+										emptyMessage="#{msg.NO_RECORDS_FOUND}">
+										<f:facet name="header">
+										Propiedades de Decimal
+									</f:facet>
+										<p:column styleClass="text-center">
+										Propiedad #{rowId+1}
+									</p:column>
+										<p:column styleClass="text-center">
+											<h:outputText value="#{cc.attrs.valueNumberDouble[rowId]}" />
+										</p:column>
+									</p:dataTable>
+								</ui:fragment>
+							</div>
+						</div>
+					</h:panelGroup>
+				</div>
+			</div>
+		</div>
+	</composite:implementation>
+</h:body>
+</html>

@@ -1,0 +1,106 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:tc="http://xmlns.jcp.org/jsf/composite/tCheckComponents">
+
+<composite:interface>
+	<composite:attribute name="selectorClass" required="true" />
+	<composite:attribute name="selectedEquipment" />
+	<composite:attribute name="newRevisionCycle" />
+	<composite:attribute name="selectedChecklistId" />
+	<composite:attribute name="headChecklistTemplates" />
+	<composite:attribute name="saveAction" required="true"
+		method-signature="void action()" />
+	<composite:attribute name="update" />
+</composite:interface>
+
+<composite:implementation>
+	<div class="modal fade #{cc.attrs.selectorClass}" tabindex="-1"
+		role="dialog" aria-labelledby="revisionCycleDataModal"
+		aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<h:panelGroup id="content">
+					<div class="modal-header"
+						style="background-color: #DAE8EF; color: #003D50; border-bottom: 3px solid #C1D5DF">
+						<button type="button" class="close" data-dismiss="modal">
+							<i class="fa fa-times" />
+						</button>
+						<ui:fragment rendered="#{cc.attrs.selectedEquipment._Id != null}">
+							<h4>
+								<h:outputText value="#{cc.attrs.title}"
+									style="font-weight:bold;" />
+							</h4>
+							<p>
+								<h:outputText value="Código: " />
+								<h:outputText value="#{cc.attrs.selectedEquipment._Code} "
+									style="font-weight:bold;" />
+								<h:outputText value="Nº de Serie: " style="margin-left:20px;"
+									rendered="#{cc.attrs.selectedEquipment._SerialNumber != ''}" />
+								<h:outputText
+									value="#{cc.attrs.selectedEquipment._SerialNumber}"
+									style="font-weight:bold;" />
+							</p>
+						</ui:fragment>
+						<ui:fragment rendered="#{cc.attrs.selectedEquipment._Id == null}">
+							<h4>
+								<h:outputText value="Añadir revisión programada al nuevo equipo"
+									style="font-weight:bold;" />
+							</h4>
+						</ui:fragment>
+					</div>
+					<div class="modal-body form-horizontal">
+						<div class="form-group">
+							<p:outputLabel value="#{msg.CHECKLIST}"
+								class="col-sm-3 control-label text-right" />
+							<div class="col-sm-7">
+								<h:selectOneMenu converter="omnifaces.SelectItemsConverter"
+									filter="true" filterMatchMode="custom"
+									filterFunction="skipAccentsContains" appendTo="@this"
+									value="#{cc.attrs.selectedChecklistId}" style="width:100%;"
+									styleClass="form-control">
+									<f:selectItems value="#{cc.attrs.headChecklistTemplates}"
+										var="organization" itemValue="#{organization}"
+										itemLabel="#{organization._Name}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div class="form-group">
+							<p:outputLabel for="name" value="#{msg.NAME}"
+								class="col-sm-3 control-label text-right" />
+							<div class="col-sm-7">
+								<p:inputText id="name" styleClass="form-control"
+									style="width:100%;" required="true"
+									value="#{cc.attrs.newRevisionCycle._Name}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label text-right">#{msg.PERIODICITY}</label>
+							<tc:periodicityInput spinnerClass="col-md-2 col-xs-4"
+								selectClass="col-md-5 col-xs-8"
+								value="#{cc.attrs.newRevisionCycle._CyclePeriodicity}" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<p:commandButton validateClient="true"
+							rendered="#{cc.attrs.selectedEquipment._Id != null}"
+							value="#{msg.SAVE}" action="#{cc.attrs.saveAction}"
+							styleClass="btn btn-default"
+							oncomplete="$('.#{cc.attrs.selectorClass}').modal('hide');"
+							ajax="false" />
+						<p:commandButton validateClient="true"
+							rendered="#{cc.attrs.selectedEquipment._Id == null}"
+							value="Crear" action="#{cc.attrs.saveAction}"
+							styleClass="btn btn-default"
+							oncomplete="$('.#{cc.attrs.selectorClass}').modal('hide');"
+							update="#{cc.attrs.update}" />
+					</div>
+				</h:panelGroup>
+			</div>
+		</div>
+	</div>
+</composite:implementation>
+</html>

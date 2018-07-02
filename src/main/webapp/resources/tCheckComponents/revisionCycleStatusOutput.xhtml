@@ -1,0 +1,28 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+
+<composite:interface>
+	<composite:attribute name="status"
+		type="com.tesicnor.tcheck.exchange.model.revisions.RevisionCycleStatus"
+		required="true" />
+</composite:interface>
+
+<composite:implementation>
+	<h:outputText class="badge badge-ok-status"
+		rendered="#{cc.attrs.status == RevisionCycleStatus.OK}" value="CORRECTA" />
+
+	<h:outputText class="badge badge-no-ok-status"
+		rendered="#{cc.attrs.status == RevisionCycleStatus.NO_OK}"
+		value="INCORRECTA" />
+
+	<h:outputText class="badge badge-no-status"
+		rendered="#{cc.attrs.status == RevisionCycleStatus.NO_REVISION}"
+		value="SIN REVISIONES" />
+
+	<h:outputText class="badge badge-warning-status"
+		rendered="#{cc.attrs.status == RevisionCycleStatus.NEEDS_REVISION}"
+		value="NECESITA REVISIÓN" />
+</composite:implementation>
+</html>

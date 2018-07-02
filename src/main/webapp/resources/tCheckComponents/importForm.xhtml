@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+	xmlns:tc="http://xmlns.jcp.org/jsf/composite/tCheckComponents">
+<h:body>
+	<composite:interface>
+		<composite:attribute name="table" />
+		
+	</composite:interface>
+	<composite:implementation>
+		<div class="row">
+			<div class="container">
+				<div class="col-xs-12">
+					<div class="panel panel-default"
+						style="border-color: #C1D5DF; background-color: #DAE8EF;">
+						<div class="panel-body">
+							<div class="col-xs-12">
+								<h:form styleClass="form-horizontal">
+									<p:fileUpload rendered="#{bean._ShowFileUpload}"
+										fileUploadListener="#{bean.handleXlsUpload}" mode="advanced"
+										auto="true" label="#{msg.OPERATIONS_FILE_UPLOAD}"
+										update="" />
+
+									<p>
+										<h:outputText rendered="#{!bean._ShowFileUpload}"
+											styleClass="fa fa-check"
+											style="color: green; font-size:3em; margin-right: 15px;" />
+										<h:outputText rendered="#{!bean._ShowFileUpload}"
+											value="El fichero se ha validado correctamente y puede ser importado."
+											styleClass="ok-value" />
+									</p>
+
+									<p>
+										<h:outputText
+											rendered="#{bean._ShowFileUpload and not empty bean._EquipmentsToImport }"
+											styleClass="fa fa-close"
+											style="color: #e61980; font-size:3em; margin-right: 15px;" />
+										<h:outputText
+											rendered="#{bean._ShowFileUpload and not empty bean._EquipmentsToImport }"
+											value="Se han encontrado los siguientes errores en el fichero, revíselo y vuelva a intentarlo."
+											styleClass="invalid-value" />
+									</p>
+
+									<p>
+										<h:outputText rendered="#{bean._ShowWarningAlert}"
+											styleClass="fa fa-exclamation-triangle"
+											style="color: orange; font-size:3em; margin-right: 15px;" />
+
+										<h:outputText rendered="#{bean._ShowWarningAlert}"
+											value="Se han encontrado nuevos tipos o equipos para crear."
+											styleClass="warning-value" />
+									</p>
+
+									<p:commandButton value="#{msg.SAVE}" ajax="false"
+										rendered="#{not bean._ShowFileUpload}"
+										action="#{bean.saveEquipments}" styleClass="pull-right"
+										style="margin-left:15px;" />
+
+									<p:button value="#{msg.OPERATIONS_FILE_UPLOAD_RETRY}"
+										outcome="equipment_import"
+										rendered="#{not bean._ShowFileUpload}" styleClass="pull-right">
+										<f:param name="idOrganization"
+											value="#{bean._IdSelectedOrganization}" />
+									</p:button>
+
+								</h:form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</composite:implementation>
+</h:body>
+</html>

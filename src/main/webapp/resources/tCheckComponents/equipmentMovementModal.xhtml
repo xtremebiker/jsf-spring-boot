@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<h:body>
+	<composite:interface>
+		<composite:attribute name="selectorClass" required="true" />
+		<composite:attribute name="head" />
+		<composite:attribute name="headWarehouses" />
+		<composite:attribute name="worker" />
+		<composite:attribute name="warehouse" />
+		<composite:attribute name="selectedWarehouse" />
+		<composite:attribute name="action" required="true"
+			method-signature="void action()" />
+	</composite:interface>
+
+	<composite:implementation>
+		<div class="modal fade #{cc.attrs.selectorClass}" tabindex="-1"
+			role="dialog" aria-labelledby="equipmentMovementModal"
+			aria-hidden="true" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<h:panelGroup id="content">
+						<div class="modal-header"
+							style="background-color: #DAE8EF; color: #003D50; border-bottom: 3px solid #C1D5DF">
+							<button type="button" class="close" data-dismiss="modal">
+								<i class="fa fa-times"></i>
+							</button>
+							<h4>
+								<h:outputText value="#{cc.attrs.head}" style="font-weight:bold;" />
+							</h4>
+						</div>
+						<ui:fragment rendered="#{cc.attrs.warehouse}">
+							<div class="modal-body small-modal-body">
+								<div class="form-group form-group-sm"
+									style="margin-bottom: 50px;">
+									<p:outputLabel for="warehouse" value="Almacén"
+										class="col-sm-3 control-label text-right" />
+									<div class="col-sm-7">
+										<p:selectOneMenu id="warehouse" required="true"
+											converter="omnifaces.SelectItemsConverter" filter="true"
+											filterMatchMode="custom" filterFunction="skipAccentsContains"
+											appendTo="@this" value="#{cc.attrs.selectedWarehouse}"
+											style="width:100%;">
+											<f:selectItems value="#{cc.attrs.headWarehouses}"
+												var="warehouse" itemValue="#{warehouse._Id}"
+												itemLabel="#{warehouse._Name}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+						</ui:fragment>
+						<ui:fragment rendered="#{cc.attrs.worker}">
+							<div class="modal-body small-modal-body">
+								<div class="form-group form-group-sm"
+									style="margin-bottom: 50px;">
+									<p:outputLabel for="worker" value="Trabajador"
+										class="col-sm-3 control-label text-right" />
+									<div class="col-sm-7">
+										<p:selectOneMenu id="worker" required="true"
+											converter="omnifaces.SelectItemsConverter" filter="true"
+											filterMatchMode="custom" filterFunction="skipAccentsContains"
+											appendTo="@this" value="#{cc.attrs.selectedWarehouse}"
+											style="width:100%;">
+											<f:selectItems value="#{cc.attrs.headWarehouses}"
+												var="warehouse" itemValue="#{warehouse._Id}"
+												itemLabel="#{warehouse._Surname1} #{warehouse._Surname2}, #{warehouse._Name}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+						</ui:fragment>
+						<div class="modal-footer">
+							<p:commandButton validateClient="true" value="Mover"
+								action="#{cc.attrs.action}" styleClass="btn btn-default" />
+						</div>
+					</h:panelGroup>
+				</div>
+			</div>
+		</div>
+	</composite:implementation>
+</h:body>
+</html>

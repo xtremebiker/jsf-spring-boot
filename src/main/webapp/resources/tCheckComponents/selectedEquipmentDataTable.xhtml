@@ -1,0 +1,366 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:body>
+	<composite:interface>
+		<composite:attribute name="equipmentS" />
+		<composite:attribute name="organization" />
+		<composite:attribute name="widgetVarName" />
+		<composite:attribute name="isNotTask" />
+		<composite:attribute name="isEmpty" />
+		<composite:attribute name="showStatus" required="false" />
+		<composite:attribute name="showFilters" />
+		<composite:attribute name="showPagination" required="false" />
+		<composite:attribute name="asigned" required="false" />
+		<composite:attribute name="update" />
+		<composite:attribute name="actionRemove" required="false"
+			method-signature="void method()" />
+		<composite:attribute name="actionSave" required="false"
+			method-signature="void method()" />
+	</composite:interface>
+	<composite:implementation>
+		<div class="row">
+			<div class="container">
+				<div class="col-xs-12">
+					<hr />
+				</div>
+			</div>
+		</div>
+
+		<div class="row margin" id="selectedEquipment">
+			<div class="container">
+				<div class="col-xs-12">
+					<p class="titleTableDetail">
+						<h:outputText rendered="#{!cc.attrs.asigned}"
+							value="#{msg.SELECTED}" />
+						<h:outputText rendered="#{cc.attrs.asigned}" value="Asignados" />
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="container">
+				<div class="col-xs-12">
+
+					<ui:param name="equipmentSelectedList"
+						value="#{cc.attrs.equipmentS._Value}" />
+					<p:dataTable id="selectedEquipmentDataTable"
+						var="equipmentSelected" value="#{equipmentSelectedList}"
+						widgetVar="#{cc.attrs.widgetVarName}"
+						filteredValue="#{cc.attrs.equipmentS._FilteredValue}" rows="5"
+						paginator="true" emptyMessage="#{msg.NO_RECORDS_FOUND}"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+						tableStyleClass="table table-bordered table-striped table-hover table-condensed">
+						<p:column style="width: 45pt;" styleClass="text-center">
+							<p:commandLink styleClass="btn btn-default btn-sm"
+								action="#{cc.attrs.actionRemove}" update="#{cc.attrs.update}"
+								onsuccess="document.activeElement.blur();">
+								<f:attribute name="equipmentS" value="#{equipmentSelected}" />
+								<i class="fa fa-times" />
+							</p:commandLink>
+						</p:column>
+						<p:column rendered="#{cc.attrs.showFilters}"
+							filterBy="#{equipmentSelected._Organization}"
+							filterMatchMode="in" headerText="Ubicación"
+							styleClass="text-center"
+							sortBy="#{equipmentSelected._Organization}">
+							<f:facet name="filter">
+								<p:selectCheckboxMenu label="#{msg.FILTER}"
+									onchange="PF('#{cc.attrs.widgetVarName}').filter();"
+									onToggleSelect="PF('#{cc.attrs.widgetVarName}').filter();"
+									filter="true" filterMatchMode="custom"
+									filterFunction="skipAccentsContains" style="width: 100%;"
+									widgetVar="organization_filter_wdgt">
+									<p:ajax
+										onsuccess="markSelectMany(PF('organization_filter_wdgt'))" />
+									<p:ajax event="toggleSelect"
+										onsuccess="PF('#{cc.attrs.widgetVarName}').filter(); markSelectMany(PF('organization_filter_wdgt'));" />
+									<f:selectItems
+										value="#{facesUtils.propertyDistinctValuesSelection(equipmentSelectedList,'_Organization')}" />
+								</p:selectCheckboxMenu>
+							</f:facet>
+							<h:outputText value="#{equipmentSelected._Organization}" />
+						</p:column>
+						<p:column rendered="#{!cc.attrs.showFilters}"
+							headerText="#{msg.ORGANIZATION}">
+							<h:outputText value="#{equipmentSelected._Organization}" />
+						</p:column>
+
+						<p:column rendered="#{!cc.attrs.showFilters}"
+							headerText="#{msg.TYPE}" styleClass="text-center">
+							<h:outputText value="#{equipmentSelected._Type}" />
+						</p:column>
+						<p:column rendered="#{cc.attrs.showFilters}"
+							filterBy="#{equipmentSelected._Type}" filterMatchMode="in"
+							headerText="#{msg.TYPE}" styleClass="text-center"
+							sortBy="#{equipmentSelected._Type}">
+							<f:facet name="filter">
+								<p:selectCheckboxMenu label="#{msg.FILTER}"
+									onchange="PF('#{cc.attrs.widgetVarName}').filter();"
+									onToggleSelect="PF('#{cc.attrs.widgetVarName}').filter();"
+									filter="true" filterMatchMode="custom"
+									filterFunction="skipAccentsContains" style="width: 100%;"
+									widgetVar="typeSelect_filter_wdgt">
+									<p:ajax
+										onsuccess="markSelectMany(PF('typeSelect_filter_wdgt'))" />
+									<p:ajax event="toggleSelect"
+										onsuccess="PF('#{cc.attrs.widgetVarName}').filter(); markSelectMany(PF('typeSelect_filter_wdgt'));" />
+									<f:selectItems
+										value="#{facesUtils.propertyDistinctValuesSelection(equipmentSelectedList,'_Type')}" />
+								</p:selectCheckboxMenu>
+							</f:facet>
+							<h:outputText value="#{equipmentSelected._Type}" />
+						</p:column>
+
+						<p:column rendered="#{!cc.attrs.showFilters}"
+							headerText="#{msg.BRAND}" styleClass="text-center">
+							<h:outputText value="#{equipmentSelected._Brand}" />
+						</p:column>
+						<p:column rendered="#{cc.attrs.showFilters}"
+							filterBy="#{equipmentSelected._Brand}" filterMatchMode="in"
+							headerText="#{msg.BRAND}" styleClass="text-center"
+							sortBy="#{equipmentSelected._Brand}">
+							<f:facet name="filter">
+								<p:selectCheckboxMenu label="#{msg.FILTER}"
+									onchange="PF('#{cc.attrs.widgetVarName}').filter();"
+									onToggleSelect="PF('#{cc.attrs.widgetVarName}').filter();"
+									filter="true" filterMatchMode="custom"
+									filterFunction="skipAccentsContains" style="width: 100%;"
+									widgetVar="brandSelect_filter_wdgt">
+									<p:ajax
+										onsuccess="markSelectMany(PF('brandSelect_filter_wdgt'))" />
+									<p:ajax event="toggleSelect"
+										onsuccess="PF('#{cc.attrs.widgetVarName}').filter(); markSelectMany(PF('brandSelect_filter_wdgt'));" />
+									<f:selectItems
+										value="#{facesUtils.propertyDistinctValuesSelection(equipmentSelectedList,'_Brand')}" />
+								</p:selectCheckboxMenu>
+							</f:facet>
+							<h:outputText value="#{equipmentSelected._Brand}" />
+						</p:column>
+
+						<p:column rendered="#{!cc.attrs.showFilters}"
+							headerText="#{msg.MODEL}" styleClass="text-center">
+							<h:outputText value="#{equipmentSelected._Model}" />
+						</p:column>
+						<p:column rendered="#{cc.attrs.showFilters}"
+							filterBy="#{equipmentSelected._Model}" filterMatchMode="in"
+							headerText="#{msg.MODEL}" styleClass="text-center"
+							sortBy="#{equipmentSelected._Model}">
+							<f:facet name="filter">
+								<p:selectCheckboxMenu label="#{msg.FILTER}"
+									onchange="PF('#{cc.attrs.widgetVarName}').filter();"
+									onToggleSelect="PF('#{cc.attrs.widgetVarName}').filter();"
+									filter="true" filterMatchMode="custom"
+									filterFunction="skipAccentsContains" style="width: 100%;"
+									widgetVar="modelSelect_filter_wdgt">
+									<p:ajax
+										onsuccess="markSelectMany(PF('modelSelect_filter_wdgt'))" />
+									<p:ajax event="toggleSelect"
+										onsuccess="PF('#{cc.attrs.widgetVarName}').filter(); markSelectMany(PF('modelSelect_filter_wdgt'));" />
+									<f:selectItems
+										value="#{facesUtils.propertyDistinctValuesSelection(equipmentSelectedList,'_Model')}" />
+								</p:selectCheckboxMenu>
+							</f:facet>
+							<h:outputText value="#{equipmentSelected._Model}" />
+						</p:column>
+
+						<p:column rendered="#{!cc.attrs.showFilters}"
+							headerText="#{msg.CODE}" styleClass="text-center">
+							<h:outputText value="#{equipmentSelected._Code}" />
+						</p:column>
+						<p:column rendered="#{cc.attrs.showFilters}"
+							filterBy="#{equipmentSelected._Code}" filterMatchMode="contains"
+							filterFunction="#{viewUtils.skipAccentsContains}"
+							headerText="#{msg.CODE}" styleClass="text-center"
+							sortBy="#{equipmentSelected._Code}">
+							<f:facet name="filter">
+								<p:inputText onkeyup="PF('#{cc.attrs.widgetVarName}').filter();"
+									style="width: 100%;" />
+							</f:facet>
+							<h:outputText value="#{equipmentSelected._Code}" />
+						</p:column>
+
+						<p:column rendered="#{!cc.attrs.showFilters}"
+							headerText="#{msg.SERIAL_NUMBER}" styleClass="text-center">
+							<h:outputText value="#{equipmentSelected._SerialNumber}" />
+						</p:column>
+						<p:column rendered="#{cc.attrs.showFilters}"
+							filterBy="#{equipmentSelected._SerialNumber}"
+							filterMatchMode="contains" headerText="#{msg.SERIAL_NUMBER}"
+							styleClass="text-center"
+							sortBy="#{equipmentSelected._SerialNumber}">
+							<f:facet name="filter">
+								<p:inputText onkeyup="PF('#{cc.attrs.widgetVarName}').filter();"
+									style="width: 100%;" />
+							</f:facet>
+							<h:outputText value="#{equipmentSelected._SerialNumber}" />
+						</p:column>
+
+						<p:column
+							rendered="#{cc.attrs.showStatus and !cc.attrs.showFilters}"
+							headerText="#{msg.STATUS}" styleClass="text-center">
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'OUT_OF_SERVICE'}"
+								class="badge" value="#{msg.OUT_OF_SERVICE}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'RETIRED'}"
+								class="badge" value="#{msg.RETIRED}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'EXPIRED'}"
+								class="badge badge-no-ok-status" value="#{msg.EXPIRED}" />
+							<h:outputText class="badge badge-no-ok-status"
+								rendered="#{equipmentSelected._EquipmentStatus == 'INCORRECT'}"
+								value="#{msg.INCORRECT}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'INDETERMINATE'}"
+								class="badge badge-indetermined-status"
+								value="#{msg.INDETERMINATED}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'NEEDS_REVISION'}"
+								class="badge badge-warning-status" value="#{msg.NEEDS_REVISION}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'REPARATION_PROCESS'}"
+								class="badge badge-warning-status"
+								value="#{msg.REPARATION_PROCESS}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'NEW'}"
+								class="badge badge-ok-status" value="#{msg.NEW}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'CORRECT'}"
+								class="badge badge-ok-status" value="#{msg.CORRECT}" />
+						</p:column>
+						<p:column
+							rendered="#{cc.attrs.showStatus and cc.attrs.showFilters}"
+							headerText="#{msg.STATUS}"
+							filterBy="#{equipmentSelected._EquipmentStatus.toString()}"
+							filterMatchMode="in" styleClass="text-center">
+							<f:facet name="filter">
+								<p:selectCheckboxMenu label="#{msg.FILTER}" filter="true"
+									onchange="PF('#{cc.attrs.widgetVarName}').filter();"
+									onToggleSelect="PF('#{cc.attrs.widgetVarName}').filter();"
+									widgetVar="status_filter_wdgt">
+									<p:ajax onsuccess="markSelectMany(PF('status_filter_wdgt'))" />
+									<p:ajax event="toggleSelect"
+										onsuccess="PF('#{cc.attrs.widgetVarName}').filter();" />
+									<f:selectItem itemLabel="#{msg.NEW}" itemValue="NEW" />
+									<f:selectItem itemLabel="#{msg.CORRECT}" itemValue="CORRECT" />
+									<f:selectItem itemLabel="#{msg.NEEDS_REVISION}"
+										itemValue="NEEDS_REVISION" />
+									<f:selectItem itemLabel="#{msg.REPARATION_PROCESS}"
+										itemValue="REPARATION_PROCESS" />
+									<f:selectItem itemLabel="#{msg.INDETERMINATED}"
+										itemValue="INDETERMINATE" />
+									<f:selectItem itemLabel="#{msg.INCORRECT}"
+										itemValue="INCORRECT" />
+									<f:selectItem itemLabel="#{msg.EXPIRED}" itemValue="EXPIRED" />
+									<f:selectItem itemLabel="#{msg.OUT_OF_SERVICE}"
+										itemValue="OUT_OF_SERVICE" />
+									<f:selectItem itemLabel="#{msg.RETIRED}" itemValue="RETIRED" />
+								</p:selectCheckboxMenu>
+							</f:facet>
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'NEW'}"
+								class="badge badge-ok-status" value="#{msg.NEW}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'CORRECT'}"
+								class="badge badge-ok-status" value="#{msg.CORRECT}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'NEEDS_REVISION'}"
+								class="badge badge-warning-status" value="#{msg.NEEDS_REVISION}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'REPARATION_PROCESS'}"
+								class="badge badge-warning-status"
+								value="#{msg.REPARATION_PROCESS}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'INDETERMINATE'}"
+								class="badge badge-indetermined-status"
+								value="#{msg.INDETERMINATED}" />
+							<h:outputText class="badge badge-no-ok-status"
+								rendered="#{equipmentSelected._EquipmentStatus == 'INCORRECT'}"
+								value="#{msg.INCORRECT}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'EXPIRED'}"
+								class="badge badge-no-ok-status" value="#{msg.EXPIRED}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'OUT_OF_SERVICE'}"
+								class="badge" value="#{msg.OUT_OF_SERVICE}" />
+							<h:outputText
+								rendered="#{equipmentSelected._EquipmentStatus == 'RETIRED'}"
+								class="badge" value="#{msg.RETIRED}" />
+						</p:column>
+
+						<p:column rendered="#{!cc.attrs.showFilters}"
+							headerText="#{msg.WAREHOUSE}" styleClass="text-center">
+							<h:outputText value="#{equipmentSelected._Warehouse}" />
+						</p:column>
+						<p:column rendered="#{cc.attrs.showFilters}"
+							filterBy="#{equipmentSelected._Warehouse}" filterMatchMode="in"
+							headerText="#{msg.WAREHOUSE}" styleClass="text-center"
+							sortBy="#{equipmentSelected._Warehouse}">
+							<f:facet name="filter">
+								<p:selectCheckboxMenu label="#{msg.FILTER}"
+									onchange="PF('#{cc.attrs.widgetVarName}').filter();"
+									onToggleSelect="PF('#{cc.attrs.widgetVarName}').filter();"
+									filter="true" filterMatchMode="custom"
+									filterFunction="skipAccentsContains" style="width: 100%;"
+									widgetVar="war_filter_wdgt">
+									<p:ajax onsuccess="markSelectMany(PF('war_filter_wdgt'))" />
+									<p:ajax event="toggleSelect"
+										onsuccess="PF('#{cc.attrs.widgetVarName}').filter(); markSelectMany(PF('war_filter_wdgt'));" />
+									<f:selectItems
+										value="#{facesUtils.propertyDistinctValuesSelection(equipmentSelectedList,'_Warehouse')}" />
+								</p:selectCheckboxMenu>
+							</f:facet>
+							<h:outputText value="#{equipmentSelected._Warehouse}" />
+						</p:column>
+
+						<p:column rendered="#{!cc.attrs.showFilters}"
+							headerText="#{msg.WORKER}" styleClass="text-center">
+							<h:outputText
+								value="#{equipmentSelected._AssignedWorkerSurnamesName}" />
+						</p:column>
+
+						<p:column rendered="#{cc.attrs.showFilters}"
+							filterBy="#{equipmentSelected._AssignedWorkerSurnamesName}"
+							filterMatchMode="in" headerText="#{msg.WORKER}"
+							styleClass="text-center"
+							sortBy="#{equipmentSelected._AssignedWorkerSurnamesName}">
+							<f:facet name="filter">
+								<p:selectCheckboxMenu label="#{msg.FILTER}"
+									onchange="PF('#{cc.attrs.widgetVarName}').filter();"
+									onToggleSelect="PF('#{cc.attrs.widgetVarName}').filter();"
+									filter="true" filterMatchMode="custom"
+									filterFunction="skipAccentsContains" style="width: 100%;"
+									widgetVar="worker_filter_wdgt">
+									<p:ajax event="toggleSelect"
+										onsuccess="filterAndMarkSelectMany('worker_filter_wdgt')" />
+									<f:selectItems
+										value="#{facesUtils.propertyDistinctValuesSelection(equipmentSelectedList,'_AssignedWorkerSurnamesName')}" />
+								</p:selectCheckboxMenu>
+							</f:facet>
+							<h:outputText
+								value="#{equipmentSelected._AssignedWorkerSurnamesName}" />
+						</p:column>
+
+					</p:dataTable>
+					<ui:fragment rendered="#{cc.attrs.isNotTask}">
+						<div class="modal-footer margin">
+							<p:commandLink rendered="#{!cc.attrs.isEmpty}"
+								value="#{msg.SAVE}" styleClass="btn btn-default"
+								action="#{cc.attrs.actionSave}" />
+						</div>
+					</ui:fragment>
+				</div>
+			</div>
+		</div>
+	</composite:implementation>
+</h:body>
+</html>

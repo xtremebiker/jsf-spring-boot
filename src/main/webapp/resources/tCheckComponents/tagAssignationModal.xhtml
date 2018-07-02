@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:tc="http://xmlns.jcp.org/jsf/composite/tCheckComponents">
+<h:body>
+	<composite:interface>
+		<composite:attribute name="selectorClass" required="true" />
+		<composite:attribute name="selectedEquipment" />
+		<composite:attribute name="tag" />
+		<composite:attribute name="action" required="true"
+			method-signature="void action()" />
+		<composite:attribute name="update" />
+	</composite:interface>
+	<composite:implementation>
+		<div class="modal fade  #{cc.attrs.selectorClass}" tabindex="-1"
+			role="dialog" aria-labelledby="nfcTagAssignationModal"
+			aria-hidden="true" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<h:panelGroup id="content">
+						<div class="modal-header"
+							style="background-color: #DAE8EF; color: #003D50; border-bottom: 3px solid #C1D5DF">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4>
+								<h:outputText
+									value="#{cc.attrs.selectedEquipment._Type}, #{cc.attrs.selectedEquipment._Brand}, 
+								#{cc.attrs.selectedEquipment._Model}"
+									style="font-weight:bold;" />
+							</h4>
+							<p>
+								<h:outputText value="Código: " />
+								<h:outputText value="#{cc.attrs.selectedEquipment._Code} "
+									style="font-weight:bold;" />
+								<h:outputText value="Nº de Serie: " style="margin-left:20px;"
+									rendered="#{cc.attrs.selectedEquipment._SerialNumber != ''}" />
+								<h:outputText
+									value="#{cc.attrs.selectedEquipment._SerialNumber}"
+									style="font-weight:bold;" />
+							</p>
+						</div>
+
+						<div class="modal-body">
+							<!-- NFC TAG INPUT -->
+							<div class="form-group form-group-sm">
+								<label class="col-sm-3 control-label text-right">#{msg.NFC_TAG}</label>
+								<div class="col-sm-9">
+									<h:inputText styleClass="form-control" value="#{cc.attrs.tag}">
+									</h:inputText>
+								</div>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<p:commandButton value="#{msg.SAVE}" action="#{cc.attrs.action}"
+								styleClass="btn btn-default"
+								oncomplete="$('.#{cc.attrs.selectorClass}').modal('hide');"
+								update="#{cc.attrs.update}" />
+						</div>
+					</h:panelGroup>
+				</div>
+			</div>
+		</div>
+	</composite:implementation>
+</h:body>
+</html>

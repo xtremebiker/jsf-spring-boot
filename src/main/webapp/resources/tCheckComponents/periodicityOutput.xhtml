@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+
+<composite:interface>
+	<!-- Especificar value o periodicityValue y periodicityType -->
+	<composite:attribute name="value" />
+	<composite:attribute name="periodicityValue" />
+	<composite:attribute name="periodicityType" />
+</composite:interface>
+
+<composite:implementation>
+	<ui:param name="periodicityValue"
+		value="#{empty cc.attrs.periodicityValue ? cc.attrs.value._Value : cc.attrs.periodicityValue}" />
+	<ui:param name="periodicityType"
+		value="#{empty cc.attrs.periodicityType ? cc.attrs.value._Type : cc.attrs.periodicityType}" />
+	<h:outputText value="#{periodicityValue}" />
+	<h:outputText
+		rendered="#{periodicityValue == 1 and periodicityType eq PeriodicityType.DAY}"
+		value=" Día" />
+	<h:outputText
+		rendered="#{periodicityValue != 1 and periodicityType eq PeriodicityType.DAY}"
+		value=" Días" />
+	<h:outputText
+		rendered="#{periodicityValue == 1 and periodicityType eq PeriodicityType.WEEK}"
+		value=" Semana " />
+	<h:outputText
+		rendered="#{periodicityValue != 1 and periodicityType eq PeriodicityType.WEEK}"
+		value=" Semanas" />
+	<h:outputText
+		rendered="#{periodicityValue == 1 and periodicityType eq PeriodicityType.MONTH}"
+		value=" Mes" />
+	<h:outputText
+		rendered="#{periodicityValue != 1 and periodicityType eq PeriodicityType.MONTH}"
+		value=" Meses" />
+	<h:outputText
+		rendered="#{periodicityValue == 1 and periodicityType eq PeriodicityType.YEAR}"
+		value=" Año" />
+	<h:outputText
+		rendered="#{periodicityValue != 1 and periodicityType eq PeriodicityType.YEAR}"
+		value=" Años" />
+</composite:implementation>
+
+</html>
