@@ -35,23 +35,38 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		
+		<!-- Uncomment for JSF 2.2 -->
+
+		<!-- 		<dependency> -->
+		<!-- 			<groupId>com.sun.faces</groupId> -->
+		<!-- 			<artifactId>jsf-api</artifactId> -->
+		<!-- 			<version>2.2.17</version> -->
+		<!-- 		</dependency> -->
+		
+		<!-- 		<dependency> -->
+		<!-- 			<groupId>com.sun.faces</groupId> -->
+		<!-- 			<artifactId>jsf-impl</artifactId> -->
+		<!-- 			<version>2.2.17</version> -->
+		<!-- 		</dependency> -->
+		
 
 		<dependency>
-			<groupId>com.sun.faces</groupId>
-			<artifactId>jsf-api</artifactId>
-			<version>2.2.17</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun.faces</groupId>
-			<artifactId>jsf-impl</artifactId>
-			<version>2.2.17</version>
+		    <groupId>org.glassfish</groupId>
+		    <artifactId>javax.faces</artifactId>
+		    <version>2.3.5</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>25.1-jre</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
