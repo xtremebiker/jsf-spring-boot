@@ -7,6 +7,7 @@
 	<groupId>org.xtremebiker.jsfspring</groupId>
 	<artifactId>jsf-spring-boot</artifactId>
 	<packaging>war</packaging>
+	<version>1.0.0</version>
 
 	<name>ui-service</name>
 	<url>http://maven.apache.org</url>
